@@ -148,6 +148,19 @@ export function useGigs() {
   return { gigs, hydrated, createGig, deleteGig, updateGig };
 }
 
+export function formatGigTime(time?: string): string {
+  if (!time) return "";
+  const [h, m] = time.split(":").map(Number);
+  if (Number.isNaN(h) || Number.isNaN(m)) return time;
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+}
+
+export function googleMapsUrl(location: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+}
+
 export function formatGigDate(date: string): string {
   try {
     const d = new Date(date + "T00:00:00");
