@@ -10,7 +10,7 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react";
-import { DEFAULT_ITEMS, TEMPLATES, formatGigDate, useGigs } from "@/lib/gigs";
+import { DEFAULT_ITEMS, TEMPLATES, formatGigDate, formatGigTime, useGigs } from "@/lib/gigs";
 import {
   Dialog,
   DialogContent,
@@ -48,6 +48,9 @@ function HomePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [name, setName] = useState("");
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [time, setTime] = useState("");
+  const [arrivalTime, setArrivalTime] = useState("");
+  const [location, setLocation] = useState("");
   const [templateId, setTemplateId] = useState<string>("custom");
 
   const upcoming = [...gigs].sort((a, b) => a.date.localeCompare(b.date));
@@ -58,9 +61,16 @@ function HomePage() {
       templateId === "custom"
         ? DEFAULT_ITEMS
         : (TEMPLATES.find((t) => t.id === templateId)?.items ?? DEFAULT_ITEMS);
-    const gig = createGig(name.trim(), date, items);
+    const gig = createGig(name.trim(), date, items, {
+      time: time || undefined,
+      arrivalTime: arrivalTime || undefined,
+      location: location.trim() || undefined,
+    });
     setDialogOpen(false);
     setName("");
+    setTime("");
+    setArrivalTime("");
+    setLocation("");
     setTemplateId("custom");
     window.location.href = `/gigs/${gig.id}`;
   };
