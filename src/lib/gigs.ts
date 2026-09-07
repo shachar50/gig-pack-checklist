@@ -150,8 +150,10 @@ export function useGigs() {
 
 export function formatGigTime(time?: string): string {
   if (!time) return "";
-  const [h, m] = time.split(":").map(Number);
-  if (Number.isNaN(h) || Number.isNaN(m)) return time;
+  const parts = time.split(":").map(Number);
+  const h = parts[0];
+  const m = parts[1];
+  if (h === undefined || m === undefined || Number.isNaN(h) || Number.isNaN(m)) return time;
   const d = new Date();
   d.setHours(h, m, 0, 0);
   return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
