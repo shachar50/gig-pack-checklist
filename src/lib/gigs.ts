@@ -10,6 +10,9 @@ export interface Gig {
   id: string;
   name: string;
   date: string; // yyyy-mm-dd
+  time?: string; // HH:MM (24h)
+  arrivalTime?: string; // HH:MM (24h)
+  location?: string;
   items: GearItem[];
 }
 
@@ -115,8 +118,13 @@ export function useGigs() {
   }, []);
 
   const createGig = useCallback(
-    (name: string, date: string, itemNames: string[]): Gig => {
-      const gig: Gig = { id: uid(), name, date, items: makeItems(itemNames) };
+    (
+      name: string,
+      date: string,
+      itemNames: string[],
+      details?: { time?: string; arrivalTime?: string; location?: string },
+    ): Gig => {
+      const gig: Gig = { id: uid(), name, date, items: makeItems(itemNames), ...details };
       update([...readGigs(), gig]);
       return gig;
     },
