@@ -55,22 +55,34 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { gigs, hydrated, createGig, deleteGig } = useGigs();
+  const { checklists, createChecklist } = useChecklists();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [name, setName] = useState("");
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [time, setTime] = useState("");
   const [arrivalTime, setArrivalTime] = useState("");
   const [location, setLocation] = useState("");
-  const [templateId, setTemplateId] = useState<string>("custom");
+  const [templateId, setTemplateId] = useState<string>("full-checklist");
+  const [newListOpen, setNewListOpen] = useState(false);
+  const [newListName, setNewListName] = useState("");
 
   const upcoming = [...gigs].sort((a, b) => a.date.localeCompare(b.date));
+
+  const handleCreateChecklist = () => {
+    const listName = newListName.trim();
+    if (!listName) return;
+    const list = createChecklist(listName, []);
+    setTemplateId(list.id);
+    setNewListName("");
+    setNewListOpen(false);
+  };
 
   const handleCreate = () => {
     if (!name.trim() || !date) return;
     const items =
-      templateId === "custom"
-        ? DEFAULT_ITEMS
-        : (TEMPLATES.find((t) => t.id === templateId)?.items ?? DEFAULT_ITEMS);
+      templateId === "empty"
+        ? []
+        : (checklists.find((t) => t.id === templateId)?.items ?? []);
     const gig = createGig(name.trim(), date, items, {
       time: time || undefined,
       arrivalTime: arrivalTime || undefined,
@@ -81,9 +93,10 @@ function HomePage() {
     setTime("");
     setArrivalTime("");
     setLocation("");
-    setTemplateId("custom");
+    setTemplateId("full-checklist");
     window.location.href = `/gigs/${gig.id}`;
   };
+
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-md bg-background px-5 pb-32 pt-10">
