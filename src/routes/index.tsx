@@ -4,22 +4,32 @@ import {
   CalendarDays,
   Check,
   ChevronRight,
+  Clock,
   LayoutTemplate,
+  ListChecks,
+  Menu,
   Music,
   Plus,
   Sparkles,
   Trash2,
 } from "lucide-react";
-import { DEFAULT_ITEMS, TEMPLATES, formatGigDate, formatGigTime, useGigs } from "@/lib/gigs";
+import { formatGigDate, formatGigTime, useChecklists, useGigs } from "@/lib/gigs";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
