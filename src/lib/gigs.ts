@@ -122,7 +122,7 @@ export function useGigs() {
       name: string,
       date: string,
       itemNames: string[],
-      details?: { time?: string; arrivalTime?: string; location?: string },
+      details?: { time?: string | undefined; arrivalTime?: string | undefined; location?: string | undefined },
     ): Gig => {
       const gig: Gig = { id: uid(), name, date, items: makeItems(itemNames), ...details };
       update([...readGigs(), gig]);
