@@ -265,12 +265,12 @@ function HomePage() {
               </Label>
               <div className="grid grid-cols-2 gap-2">
                 <TemplateCard
-                  name="Full checklist"
-                  description={`All ${DEFAULT_ITEMS.length} default items`}
-                  selected={templateId === "custom"}
-                  onClick={() => setTemplateId("custom")}
+                  name="Empty"
+                  description="Start with no items"
+                  selected={templateId === "empty"}
+                  onClick={() => setTemplateId("empty")}
                 />
-                {TEMPLATES.map((t) => (
+                {checklists.map((t) => (
                   <TemplateCard
                     key={t.id}
                     name={t.name}
@@ -280,7 +280,37 @@ function HomePage() {
                   />
                 ))}
               </div>
+              {newListOpen ? (
+                <div className="flex items-center gap-2 pt-1">
+                  <Input
+                    value={newListName}
+                    onChange={(e) => setNewListName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleCreateChecklist()}
+                    placeholder="Checklist name"
+                    autoFocus
+                    className="h-12 rounded-xl text-base"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleCreateChecklist}
+                    disabled={!newListName.trim()}
+                    className="grid size-12 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground active:scale-95 disabled:opacity-40"
+                  >
+                    <Check className="size-5" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setNewListOpen(true)}
+                  className="flex w-full items-center justify-center gap-1.5 rounded-2xl border border-dashed border-border py-3 text-sm font-semibold text-muted-foreground transition-colors hover:bg-secondary"
+                >
+                  <Plus className="size-4" />
+                  Add new checklist
+                </button>
+              )}
             </div>
+
             <button
               type="button"
               onClick={handleCreate}
