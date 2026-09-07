@@ -10,6 +10,9 @@ export interface Gig {
   id: string;
   name: string;
   date: string; // yyyy-mm-dd
+  time?: string | undefined; // HH:MM (24h)
+  arrivalTime?: string | undefined; // HH:MM (24h)
+  location?: string | undefined;
   items: GearItem[];
 }
 
@@ -115,8 +118,13 @@ export function useGigs() {
   }, []);
 
   const createGig = useCallback(
-    (name: string, date: string, itemNames: string[]): Gig => {
-      const gig: Gig = { id: uid(), name, date, items: makeItems(itemNames) };
+    (
+      name: string,
+      date: string,
+      itemNames: string[],
+      details?: { time?: string | undefined; arrivalTime?: string | undefined; location?: string | undefined },
+    ): Gig => {
+      const gig: Gig = { id: uid(), name, date, items: makeItems(itemNames), ...details };
       update([...readGigs(), gig]);
       return gig;
     },
@@ -138,6 +146,21 @@ export function useGigs() {
   );
 
   return { gigs, hydrated, createGig, deleteGig, updateGig };
+}
+
+export function formatGigTime(time?: string): string {
+  if (!time) return "";
+  const parts = time.split(":").map(Number);
+  const h = parts[0];
+  const m = parts[1];
+  if (h === undefined || m === undefined || Number.isNaN(h) || Number.isNaN(m)) return time;
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+}
+
+export function googleMapsUrl(location: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 }
 
 export function formatGigDate(date: string): string {

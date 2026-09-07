@@ -6,13 +6,16 @@ import {
   ArrowUp,
   CalendarDays,
   Check,
+  Clock,
+  MapPin,
+  Navigation,
   PartyPopper,
   Pencil,
   Plus,
   Trash2,
   X,
 } from "lucide-react";
-import { formatGigDate, useGigs, type GearItem } from "@/lib/gigs";
+import { formatGigDate, formatGigTime, googleMapsUrl, useGigs, type GearItem } from "@/lib/gigs";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/gigs/$gigId")({
@@ -138,6 +141,56 @@ function GigPage() {
           </p>
         </div>
       </div>
+
+      {/* Gig details */}
+      {(gig.time || gig.arrivalTime || gig.location) && (
+        <div className="mt-4 grid grid-cols-2 gap-2.5">
+          {gig.time && (
+            <div className="rounded-2xl border border-border bg-card p-3.5 shadow-soft">
+              <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <Clock className="size-3.5" />
+                Gig time
+              </p>
+              <p className="mt-1 font-display text-base font-semibold text-card-foreground">
+                {formatGigTime(gig.time)}
+              </p>
+            </div>
+          )}
+          {gig.arrivalTime && (
+            <div className="rounded-2xl border border-border bg-card p-3.5 shadow-soft">
+              <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <Clock className="size-3.5" />
+                Arrival / soundcheck
+              </p>
+              <p className="mt-1 font-display text-base font-semibold text-card-foreground">
+                {formatGigTime(gig.arrivalTime)}
+              </p>
+            </div>
+          )}
+          {gig.location && (
+            <div className="col-span-2 rounded-2xl border border-border bg-card p-3.5 shadow-soft">
+              <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                <MapPin className="size-3.5" />
+                Location
+              </p>
+              <div className="mt-1 flex items-center justify-between gap-3">
+                <p className="min-w-0 truncate font-display text-base font-semibold text-card-foreground">
+                  {gig.location}
+                </p>
+                <a
+                  href={googleMapsUrl(gig.location)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex shrink-0 items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold text-foreground transition-transform active:scale-95"
+                >
+                  <Navigation className="size-3.5" />
+                  Open in Maps
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Progress */}
       <div className="mt-6 rounded-3xl border border-border bg-card p-5 shadow-soft">
