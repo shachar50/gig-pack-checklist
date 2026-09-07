@@ -206,13 +206,45 @@ function HomePage() {
                 autoFocus
               />
             </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="gig-date">Date</Label>
+                <Input
+                  id="gig-date"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="h-12 rounded-xl text-base"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="gig-time">Gig time</Label>
+                <Input
+                  id="gig-time"
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="h-12 rounded-xl text-base"
+                />
+              </div>
+            </div>
             <div className="space-y-2">
-              <Label htmlFor="gig-date">Date</Label>
+              <Label htmlFor="gig-arrival">Arrival / soundcheck</Label>
               <Input
-                id="gig-date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                id="gig-arrival"
+                type="time"
+                value={arrivalTime}
+                onChange={(e) => setArrivalTime(e.target.value)}
+                className="h-12 rounded-xl text-base"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="gig-location">Location</Label>
+              <Input
+                id="gig-location"
+                placeholder="Venue or address"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 className="h-12 rounded-xl text-base"
               />
             </div>
