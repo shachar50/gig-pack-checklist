@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ChecklistsRouteImport } from './routes/checklists'
 import { Route as GigsGigIdRouteImport } from './routes/gigs.$gigId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChecklistsRoute = ChecklistsRouteImport.update({
+  id: '/checklists',
+  path: '/checklists',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GigsGigIdRoute = GigsGigIdRouteImport.update({
@@ -25,27 +31,31 @@ const GigsGigIdRoute = GigsGigIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/checklists': typeof ChecklistsRoute
   '/gigs/$gigId': typeof GigsGigIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checklists': typeof ChecklistsRoute
   '/gigs/$gigId': typeof GigsGigIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/checklists': typeof ChecklistsRoute
   '/gigs/$gigId': typeof GigsGigIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/gigs/$gigId'
+  fullPaths: '/' | '/checklists' | '/gigs/$gigId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/gigs/$gigId'
-  id: '__root__' | '/' | '/gigs/$gigId'
+  to: '/' | '/checklists' | '/gigs/$gigId'
+  id: '__root__' | '/' | '/checklists' | '/gigs/$gigId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChecklistsRoute: typeof ChecklistsRoute
   GigsGigIdRoute: typeof GigsGigIdRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checklists': {
+      id: '/checklists'
+      path: '/checklists'
+      fullPath: '/checklists'
+      preLoaderRoute: typeof ChecklistsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gigs/$gigId': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChecklistsRoute: ChecklistsRoute,
   GigsGigIdRoute: GigsGigIdRoute,
 }
 export const routeTree = rootRouteImport

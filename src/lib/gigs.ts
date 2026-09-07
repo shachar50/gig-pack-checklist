@@ -175,3 +175,132 @@ export function formatGigDate(date: string): string {
     return date;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Checklists (reusable collections of equipment names)                */
+/* ------------------------------------------------------------------ */
+
+export interface Checklist {
+  id: string;
+  name: string;
+  items: string[];
+}
+
+const CHECKLISTS_KEY = "giglist.checklists.v1";
+
+function seedChecklists(): Checklist[] {
+  return [
+    { id: "full-checklist", name: "Full Checklist", items: [...DEFAULT_ITEMS] },
+    ...TEMPLATES.map((t) => ({ id: t.id, name: t.name, items: [...t.items] })),
+  ];
+}
+
+function readChecklists(): Checklist[] {
+  try {
+    const raw = localStorage.getItem(CHECKLISTS_KEY);
+    if (!raw) {
+      const seeded = seedChecklists();
+      localStorage.setItem(CHECKLISTS_KEY, JSON.stringify(seeded));
+      return seeded;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : seedChecklists();
+  } catch {
+    return seedChecklists();
+  }
+}
+
+export function useChecklists() {
+  const [checklists, setChecklists] = useState<Checklist[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setChecklists(readChecklists());
+    setHydrated(true);
+  }, []);
+
+  const update = useCallback((next: Checklist[]) => {
+    setChecklists(next);
+    localStorage.setItem(CHECKLISTS_KEY, JSON.stringify(next));
+  }, []);
+
+  const createChecklist = useCallback(
+    (name: string, items: string[] = []): Checklist => {
+      const list: Checklist = { id: uid(), name, items };
+      update([...readChecklists(), list]);
+      return list;
+    },
+    [update],
+  );
+
+  const updateChecklist = useCallback(
+    (id: string, updater: (list: Checklist) => Checklist) => {
+      update(readChecklists().map((l) => (l.id === id ? updater(l) : l)));
+    },
+    [update],
+  );
+
+  const deleteChecklist = useCallback(
+    (id: string) => {
+      update(readChecklists().filter((l) => l.id !== id));
+    },
+    [update],
+  );
+
+  return { checklists, hydrated, createChecklist, updateChecklist, deleteChecklist };
+}
+
+/* ------------------------------------------------------------------ */
+/* Equipment library (reusable equipment names)                        */
+/* ------------------------------------------------------------------ */
+
+export const DEFAULT_EQUIPMENT = [
+  "Piano",
+  "Laptop",
+  "Audio interface",
+  "iPad",
+  "Guitar",
+  "Sustain pedal",
+  "Stereo TRS/PL cable",
+  "USB cable",
+  "Power supply",
+  "Music stand",
+  "Laptop stand",
+  "Extension cable",
+];
+
+const EQUIPMENT_KEY = "giglist.equipment.v1";
+
+function readEquipment(): string[] {
+  try {
+    const raw = localStorage.getItem(EQUIPMENT_KEY);
+    if (!raw) {
+      localStorage.setItem(EQUIPMENT_KEY, JSON.stringify(DEFAULT_EQUIPMENT));
+      return [...DEFAULT_EQUIPMENT];
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [...DEFAULT_EQUIPMENT];
+  } catch {
+    return [...DEFAULT_EQUIPMENT];
+  }
+}
+
+export function useEquipmentLibrary() {
+  const [equipment, setEquipment] = useState<string[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setEquipment(readEquipment());
+    setHydrated(true);
+  }, []);
+
+  const addEquipment = useCallback((name: string) => {
+    const current = readEquipment();
+    if (current.some((n) => n.toLowerCase() === name.toLowerCase())) return;
+    const next = [...current, name];
+    localStorage.setItem(EQUIPMENT_KEY, JSON.stringify(next));
+    setEquipment(next);
+  }, []);
+
+  return { equipment, hydrated, addEquipment };
+}
