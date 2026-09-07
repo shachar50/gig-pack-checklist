@@ -102,7 +102,9 @@ function GigPage() {
     const target = index + dir;
     if (target < 0 || target >= gig.items.length) return;
     const next = [...gig.items];
-    [next[index], next[target]] = [next[target], next[index]];
+    const moved = next[index];
+    next[index] = next[target]!;
+    next[target] = moved!;
     setItems(next);
   };
 
