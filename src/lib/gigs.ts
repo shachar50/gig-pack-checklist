@@ -10,9 +10,9 @@ export interface Gig {
   id: string;
   name: string;
   date: string; // yyyy-mm-dd
-  time?: string; // HH:MM (24h)
-  arrivalTime?: string; // HH:MM (24h)
-  location?: string;
+  time?: string | undefined; // HH:MM (24h)
+  arrivalTime?: string | undefined; // HH:MM (24h)
+  location?: string | undefined;
   items: GearItem[];
 }
 
