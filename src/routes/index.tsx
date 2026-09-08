@@ -105,13 +105,39 @@ function HomePage() {
         <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-soft">
           <Music className="size-6" strokeWidth={2.2} />
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h1 className="font-display text-3xl font-bold tracking-tight text-foreground">
             GigList
           </h1>
           <p className="text-sm text-muted-foreground">Pack it. Play it.</p>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="grid size-11 shrink-0 place-items-center rounded-full border border-border bg-card text-foreground shadow-soft transition-transform active:scale-95"
+            >
+              <Menu className="size-5" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuItem asChild>
+              <Link to="/" className="flex items-center gap-2">
+                <Music className="size-4" />
+                Gigs
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/checklists" className="flex items-center gap-2">
+                <ListChecks className="size-4" />
+                Checklists
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </header>
+
 
       {/* Upcoming gigs */}
       <h2 className="mt-10 font-display text-lg font-semibold text-foreground">
