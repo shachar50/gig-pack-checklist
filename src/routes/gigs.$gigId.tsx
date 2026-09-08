@@ -351,6 +351,50 @@ function GigPage() {
         ))}
       </ul>
 
+      {/* Quick add equipment */}
+      <section className="mt-8">
+        <h2 className="font-display text-lg font-semibold text-foreground">Add equipment</h2>
+        <p className="mt-0.5 text-sm text-muted-foreground">
+          Tap to add from your equipment library.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {equipment.map((name) => {
+            const already = gig.items.some(
+              (i) => i.name.toLowerCase() === name.toLowerCase(),
+            );
+            return (
+              <button
+                key={name}
+                type="button"
+                disabled={already}
+                aria-label={already ? `${name} already added` : `Add ${name}`}
+                onClick={() =>
+                  setItems([
+                    ...gig.items,
+                    { id: crypto.randomUUID(), name, packed: false },
+                  ])
+                }
+                className={cn(
+                  "flex items-center gap-1.5 rounded-2xl border px-3.5 py-2.5 text-sm font-semibold transition-all active:scale-95",
+                  already
+                    ? "border-success/40 bg-success-soft text-muted-foreground"
+                    : "border-border bg-card text-card-foreground shadow-soft",
+                )}
+              >
+                {already ? (
+                  <Check className="size-4 text-success" strokeWidth={3} />
+                ) : (
+                  <Plus className="size-4" strokeWidth={2.5} />
+                )}
+                {name}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+
+
       {/* Add item */}
       <div className="fixed inset-x-0 bottom-0 z-10 mx-auto w-full max-w-md bg-gradient-to-t from-background via-background to-transparent px-5 pb-6 pt-8">
         <div className="flex items-center gap-2 rounded-2xl border border-border bg-card p-2 shadow-lift">
