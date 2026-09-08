@@ -15,7 +15,15 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { formatGigDate, formatGigTime, googleMapsUrl, useGigs, type GearItem } from "@/lib/gigs";
+import {
+  formatGigDate,
+  formatGigTime,
+  googleMapsUrl,
+  useEquipmentLibrary,
+  useGigs,
+  type GearItem,
+} from "@/lib/gigs";
+
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/gigs/$gigId")({
