@@ -71,7 +71,9 @@ function GigNotFound() {
 function GigPage() {
   const { gigId } = useParams({ from: "/gigs/$gigId" });
   const { gigs, hydrated, updateGig } = useGigs();
+  const { equipment } = useEquipmentLibrary();
   const [newItem, setNewItem] = useState("");
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
   const [justCompleted, setJustCompleted] = useState(false);
