@@ -147,10 +147,20 @@ function HomePage() {
                       <p className="truncate font-display text-lg font-semibold text-card-foreground">
                         {gig.name}
                       </p>
-                      <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
-                        <CalendarDays className="size-3.5 shrink-0" />
-                        {formatGigDate(gig.date)}
+                      <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1.5">
+                          <CalendarDays className="size-3.5 shrink-0" />
+                          {formatGigDate(gig.date)}
+                        </span>
+                        {gig.time && (
+                          <span className="flex items-center gap-1.5">
+                            <span aria-hidden>·</span>
+                            <Clock className="size-3.5 shrink-0" />
+                            {formatGigTime(gig.time)}
+                          </span>
+                        )}
                       </p>
+
                     </div>
                     <div className="flex shrink-0 items-center gap-1.5">
                       {done && (
